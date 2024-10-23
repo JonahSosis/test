@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        #chatbox {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        #chat {
+            list-style-type: none;
+            padding: 0;
+            height: 300px;
+            overflow-y: scroll;
+            border-bottom: 1px solid #ccc;
+        }
+        #chat li {
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .bot {
+            background-color: #e0f7fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .user {
+            background-color: #c5e1a5;
+            border-radius: 10px;
+            text-align: right;
+        }
+        #userInput {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        #sendBtn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chatbox">
+        <ul id="chat"></ul>
+        <input type="text" id="userInput" placeholder="Type a message...">
+        <button id="sendBtn">Send</button>
+    </div>
+
+    <script>
+        const chat = document.getElementById('chat');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        const responses = {
+            'hello': 'Hi there! How can I help you today?',
+            'help': 'Sure! Ask me anything.',
+            'bye': 'Goodbye! Have a great day!',
+            'how are you': 'I am just a bot, but thanks for asking!'
+        };
+
+        function addChatMessage(message, sender) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            li.classList.add(sender === 'bot' ? 'bot' : 'user');
+            chat.appendChild(li);
+            chat.scrollTop = chat.scrollHeight;  // Scroll to the bottom
+        }
+
+        function getBotResponse(userMessage) {
+            const lowerCaseMessage = userMessage.toLowerCase();
+            return responses[lowerCaseMessage] || "I'm sorry, I didn't understand that.";
+        }
+
+        sendBtn.addEventListener('click', () => {
+            const userMessage = userInput.value;
+            if (userMessage.trim() === '') return;
+
+            addChatMessage(userMessage, 'user');
+            const botResponse = getBotResponse(userMessage);
+            setTimeout(() => addChatMessage(botResponse, 'bot'), 500);
+
+            userInput.value = '';  // Clear input field
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendBtn.click();
+        });
+    </script>
+
+</body>
+</html>
